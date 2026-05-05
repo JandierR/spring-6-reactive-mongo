@@ -19,8 +19,13 @@ import java.util.concurrent.atomic.AtomicReference;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 
+//@Testcontainers
 @SpringBootTest
 class BeerServiceImplTest {
+
+//    @Container
+//    @ServiceConnection
+//    public static MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:latest");
 
     @Autowired
     BeerService beerService;
@@ -32,6 +37,8 @@ class BeerServiceImplTest {
     BeerRepository beerRepository;
 
     BeerDTO beerDTO;
+
+
 
     @BeforeEach
     void setUp() {
@@ -50,7 +57,7 @@ class BeerServiceImplTest {
 
                 });
         await().untilTrue(atomicBoolean);
-        
+
     }
 
     @Test
