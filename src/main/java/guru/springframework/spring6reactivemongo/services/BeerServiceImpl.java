@@ -17,6 +17,12 @@ public class BeerServiceImpl implements BeerService {
     private final BeerRepository beerRepository;
 
     @Override
+    public Mono<BeerDTO> findFirstByBeerName(String beerName) {
+        return beerRepository.findFirstByBeerName(beerName)
+                .map(beerMapper::beerToBeerDto);
+    }
+
+    @Override
     public Mono<BeerDTO> saveBeer(Mono<BeerDTO> beerDTO) {
         return beerDTO.map(beerMapper::beerDtoToBeer)
                 .flatMap(beerRepository::save)
@@ -45,7 +51,7 @@ public class BeerServiceImpl implements BeerService {
     public Mono<BeerDTO> updateBeer(String beerId, BeerDTO beerDTO) {
         return beerRepository.findById(beerId)
                 .map(foundBeer -> {
-                    
+
                     foundBeer.setBeerName(beerDTO.getBeerName());
                     foundBeer.setBeerStyle(beerDTO.getBeerStyle());
                     foundBeer.setPrice(beerDTO.getPrice());
