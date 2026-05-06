@@ -23,9 +23,10 @@ public class BeerRouterConfig {
         return route()
                 .GET(BEER_PATH, accept(APPLICATION_JSON), handler::listBeers)
                 .GET(BEER_PATH_ID, accept(APPLICATION_JSON), handler::getBeerById)
-                .POST(BEER_PATH,accept(APPLICATION_JSON), handler::createNewBeer)
+                .POST(BEER_PATH, accept(APPLICATION_JSON), handler::createNewBeer)
                 .PUT(BEER_PATH_ID, accept(APPLICATION_JSON), handler::updateBeerById)
                 .PATCH(BEER_PATH_ID, accept(APPLICATION_JSON), handler::patchBeerById)
+                .DELETE(BEER_PATH_ID, accept(APPLICATION_JSON), handler::deleteBeerById)
                 .build();
     }
 }
