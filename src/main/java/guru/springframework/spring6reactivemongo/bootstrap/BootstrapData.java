@@ -1,7 +1,9 @@
 package guru.springframework.spring6reactivemongo.bootstrap;
 
 import guru.springframework.spring6reactivemongo.domain.Beer;
+import guru.springframework.spring6reactivemongo.domain.Customer;
 import guru.springframework.spring6reactivemongo.repositories.BeerRepository;
+import guru.springframework.spring6reactivemongo.repositories.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -17,12 +19,19 @@ import java.time.LocalDateTime;
 public class BootstrapData implements CommandLineRunner {
 
     private final BeerRepository beerRepository;
+    private final CustomerRepository customerRepository;
 
     @Override
     public void run(String... args) throws Exception {
         beerRepository.deleteAll()
                 .doOnSuccess(success -> {
                     loadBeerData();
+                })
+                .subscribe();
+
+        customerRepository.deleteAll()
+                .doOnSuccess(success -> {
+                    loadCustomerData();
                 })
                 .subscribe();
     }
@@ -72,6 +81,45 @@ public class BootstrapData implements CommandLineRunner {
                 });
 
                 System.out.println("Loaded Beers: " + beerRepository.count().block());
+            }
+        });
+    }
+
+    private void loadCustomerData() {
+
+        customerRepository.count().subscribe(count -> {
+            if (count == 0) {
+                Customer customer1 = Customer.builder()
+                        .customerName("Jandier")
+                        .createdDate(LocalDateTime.now())
+                        .lastModifiedDate(LocalDateTime.now())
+                        .build();
+
+                Customer customer2 = Customer.builder()
+                        .customerName("Pedro")
+                        .createdDate(LocalDateTime.now())
+                        .lastModifiedDate(LocalDateTime.now())
+                        .build();
+
+                Customer customer3 = Customer.builder()
+                        .customerName("Juan")
+                        .createdDate(LocalDateTime.now())
+                        .lastModifiedDate(LocalDateTime.now())
+                        .build();
+
+
+
+                customerRepository.save(customer1).subscribe(customer -> {
+                    System.out.println(customer.toString());
+                });
+                customerRepository.save(customer2).subscribe(customer -> {
+                    System.out.println(customer.toString());
+                });
+                customerRepository.save(customer3).subscribe(customer -> {
+                    System.out.println(customer.toString());
+                });
+
+                System.out.println("Loaded Customers: " + customerRepository.count().block());
             }
         });
     }
